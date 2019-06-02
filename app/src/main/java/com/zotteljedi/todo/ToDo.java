@@ -5,6 +5,10 @@ public class ToDo {
     private String task;
     private boolean isDone;
 
+    public ToDo(String task) {
+        this(task, false);
+    }
+
     public ToDo(String task, boolean isDone) {
         this.task = task;
         this.isDone = isDone;
