@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
         ListView listViewTodos = findViewById(R.id.listViewTodos);
 
-        adapter = new ToDoAdapter(getApplicationContext(), R.layout.todo_item, new ArrayList<ToDo>());
+        adapter = new ToDoAdapter(this, R.layout.todo_item, new ArrayList<ToDo>());
 
         listViewTodos.setAdapter(adapter);
 
@@ -31,23 +31,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void createNewToDo(View view) {
-        // ToDo erstellen und zur Liste hinzufügen
-        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        final View alertView = getLayoutInflater().inflate(R.layout.create_todo, null);
-        alertDialogBuilder.setView(alertView);
-        alertDialogBuilder.setTitle("Neue Erinnerung erstellen");
-        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        final View customAlertView = getLayoutInflater().inflate(R.layout.create_todo, null);
+
+        AlertDialog.Builder myAlertDialogBuilder = new AlertDialog.Builder(this);
+        myAlertDialogBuilder.setView(customAlertView);
+        myAlertDialogBuilder.setTitle("Neue Erinnerung erstellen");
+        myAlertDialogBuilder.setCancelable(true);
+        myAlertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
             public void onClick(DialogInterface dialog, int which) {
-                EditText txtNewTodo = alertView.findViewById(R.id.txtNewToDo);
-                ToDo toDo = new ToDo(txtNewTodo.getText().toString());
-                adapter.add(toDo);
+                EditText newTask = customAlertView.findViewById(R.id.txtNewToDo);
+                String task = newTask.getText().toString();
+                adapter.add(new ToDo(task));
             }
         });
-        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        myAlertDialogBuilder.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+            @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
-        alertDialogBuilder.show();
+
+        myAlertDialogBuilder.show();
     }
 }
