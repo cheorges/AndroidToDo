@@ -4,6 +4,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -13,7 +15,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-     private ToDoAdapter adapter;
+    private ToDoAdapter adapter;
+    private boolean showMenuTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,30 @@ public class MainActivity extends AppCompatActivity {
 
         adapter.add(new ToDo("Einkaufen", false));
         adapter.add(new ToDo("Putzen", true));
+        adapter.add(new ToDo("Katze füttern", true));
+        adapter.add(new ToDo("Tomaten anbauen", false));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.MenuDeleteCompletedTask:
+                for (ToDo toDo : adapter.getCopyToDos()) {
+                    if (toDo.isDone()) {
+                        adapter.remove(toDo);
+                    }
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 
     public void createNewToDo(View view) {

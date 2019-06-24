@@ -3,19 +3,27 @@ package com.zotteljedi.todo;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.v7.widget.ActivityChooserView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ToDoAdapter extends ArrayAdapter<ToDo> {
 
+    private List<ToDo> toDos;
+    private boolean showCompletedToDos;
+
     public ToDoAdapter(Context context, int resource, List<ToDo> toDos) {
         super(context, resource, toDos);
+        this.toDos = toDos;
     }
 
     @Override
@@ -51,9 +59,20 @@ public class ToDoAdapter extends ArrayAdapter<ToDo> {
             }
         });
 
+        checkBoxToDo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                toDo.setDone(isChecked);
+            }
+        });
+
         checkBoxToDo.setText(toDo.getTask());
         checkBoxToDo.setChecked(toDo.isDone());
 
         return toDoRowView;
+    }
+
+    public List<ToDo> getCopyToDos() {
+        return new ArrayList<>(toDos);
     }
 }
